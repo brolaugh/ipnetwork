@@ -3,6 +3,17 @@ name: .NET Core
 on: [push]
 
 jobs:
+  msbuild:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@master
+      
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+
+    - name: MSBuild
+      working-directory: src
+      run: msbuild ipnetwork.sln
   build:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -16,9 +27,15 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
+      
     - name: Build with dotnet
-      run: dotnet build --configuration Release ./src
+      run: | 
+        dotnet build --configuration Release ./src/System.Net.IPNetwork/System.Net.IPNetwork.csproj
+        dotnet build --configuration Release ./src/System.Net.IPNetwork.TestProject.NetCore/System.Net.IPNetwork.TestProject.NetCore.csproj
+        dotnet build --configuration Release ./src/System.Net.IPNetwork.ConsoleApplication.NetCore/System.Net.IPNetwork.ConsoleApplication.NetCore.csproj
+      
     - name: Pack with dotnet
       run: dotnet pack ./src/System.Net.IPNetwork
+      
     - name: Test with dotnet
       run: dotnet test ./src/System.Net.IPNetwork.TestProject.NetCore/System.Net.IPNetwork.TestProject.NetCore.csproj
