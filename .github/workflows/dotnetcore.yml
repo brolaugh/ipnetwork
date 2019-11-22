@@ -14,7 +14,6 @@ jobs:
     - name: MSBuild
       working-directory: src
       run: |
-        nuget restore ipnetwork.sln
         msbuild -t:restore ipnetwork.sln
         msbuild ipnetwork.sln
 
