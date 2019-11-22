@@ -13,7 +13,10 @@ jobs:
 
     - name: MSBuild
       working-directory: src
-      run: msbuild ipnetwork.sln
+      run: |
+        msbuild -t:restore ipnetwork.sln
+        msbuild ipnetwork.sln
+
   build:
     runs-on: ${{ matrix.os }}
     strategy:
